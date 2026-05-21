@@ -1,0 +1,18 @@
+# Xcode build artifacts
+.build/
+DerivedData/
+*.xcuserstate
+*.xcbkptlist
+xcuserdata/
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+
+# macOS
+.DS_Store
+
+# Swift Package Manager (if ever added)
+.swiftpm/
+
+# Generated icon source (icon PNGs are committed, script is not needed in repo)
+make_icon.swift
+.claude
