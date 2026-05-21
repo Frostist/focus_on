@@ -65,11 +65,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Initial sizing after first layout pass
         DispatchQueue.main.async { self.resizePanel() }
 
-        // Resize whenever the task name changes
+        // Resize whenever the task name changes. The extra async hop lets SwiftUI
+        // finish its render pass and update the hosting view's intrinsic content size
+        // before we query fittingSize.
         taskObservation = store.$currentTaskName
             .dropFirst()
             .receive(on: RunLoop.main)
-            .sink { [weak self] _ in self?.resizePanel() }
+            .sink { [weak self] _ in DispatchQueue.main.async { self?.resizePanel() } }
     }
 
     private func resizePanel() {
