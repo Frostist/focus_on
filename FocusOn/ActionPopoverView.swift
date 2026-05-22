@@ -4,6 +4,7 @@ import ServiceManagement
 struct ActionPopoverView: View {
     @EnvironmentObject var store: TaskStore
     var onCompleteTask: () -> Void
+    var onPauseTask: () -> Void
     var onChangeTask: () -> Void
     var onChangeLogPath: () -> Void
     var onQuit: () -> Void
@@ -16,6 +17,14 @@ struct ActionPopoverView: View {
             if store.currentTaskName != nil {
                 Button(action: onCompleteTask) {
                     Label("Complete task", systemImage: "checkmark")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+
+                Button(action: onPauseTask) {
+                    Label("Pause task", systemImage: "pause.circle")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)

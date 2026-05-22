@@ -47,6 +47,15 @@ final class TaskStore: ObservableObject {
         refreshRecentTasks()
     }
 
+    func pauseCurrentTask() {
+        guard let name = currentTaskName, let start = currentTaskStartedAt else { return }
+        CSVLogger.appendRow(task: name, from: start, to: Date(), completed: false)
+        currentTaskName = nil
+        currentTaskStartedAt = nil
+        persistState()
+        refreshRecentTasks()
+    }
+
     func writeClosingRowOnTerminate() {
         guard let name = currentTaskName, let start = currentTaskStartedAt else { return }
         CSVLogger.appendRow(task: name, from: start, to: Date(), completed: false)
@@ -54,9 +63,11 @@ final class TaskStore: ObservableObject {
 
     func refreshRecentTasks() {
         let rows = CSVLogger.readAllRows()
-        let open = rows.filter { $0.to == nil }
+        // Include open rows (no closing time) and paused rows (closed but not completed).
+        // Exclude rows explicitly marked completed = true.
+        let incomplete = rows.filter { $0.completed != true }
         var seen: [String: Date] = [:]
-        for row in open.reversed() {
+        for row in incomplete.reversed() {
             if seen[row.task] == nil {
                 seen[row.task] = row.from
             }

@@ -128,6 +128,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self?.store.completeCurrentTask()
                 self?.showTaskSelection(completingPrevious: true)
             },
+            onPauseTask: { [weak self, weak pop] in
+                pop?.close()
+                self?.store.pauseCurrentTask()
+            },
             onChangeTask: { [weak self, weak pop] in
                 pop?.close()
                 self?.showTaskSelection(completingPrevious: false)
