@@ -5,19 +5,23 @@ struct WidgetView: View {
     @EnvironmentObject var store: TaskStore
 
     @State private var pulseOpacity: Double = 1.0
-
-    private static let activeBlue = Color(red: 0.25, green: 0.55, blue: 1.0)
+    private static let activeBlue = Color(red: 0.4, green: 0.68, blue: 1.0)
 
     var body: some View {
         ZStack {
-            VisualEffectBackground()
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.black.opacity(0.1), lineWidth: 1)
+                )
+                .shadow(color: .black.opacity(0.18), radius: 8, x: 0, y: 3)
 
             HStack(spacing: 8) {
                 let isActive = store.currentTaskName != nil
                 Circle()
                     .fill(isActive ? Self.activeBlue : Color(nsColor: .tertiaryLabelColor))
-                    .frame(width: 16, height: 16)
+                    .frame(width: 24, height: 24)
                     .opacity(pulseOpacity)
                     .onAppear { updatePulse(active: isActive) }
                     .onChange(of: store.currentTaskName) { _ in
@@ -39,8 +43,8 @@ struct WidgetView: View {
                 }
 
                 Image(systemName: "chevron.down")
-                    .font(.system(size: 7))
-                    .foregroundStyle(.tertiary)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.secondary)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
@@ -60,18 +64,4 @@ struct WidgetView: View {
             }
         }
     }
-}
-
-struct VisualEffectBackground: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let view = NSVisualEffectView()
-        view.material = .hudWindow
-        view.blendingMode = .behindWindow
-        view.state = .active
-        view.wantsLayer = true
-        view.layer?.cornerRadius = 12
-        view.layer?.masksToBounds = true
-        return view
-    }
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
 }
