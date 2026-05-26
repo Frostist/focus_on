@@ -11,11 +11,6 @@ struct WidgetView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.black.opacity(0.1), lineWidth: 1)
-                )
-                .shadow(color: .black.opacity(0.18), radius: 8, x: 0, y: 3)
 
             HStack(spacing: 8) {
                 let isActive = store.currentTaskName != nil
